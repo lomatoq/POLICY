@@ -1,24 +1,26 @@
 using System;
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Policy.Core;
 using Policy.Data;
+#if DOTWEEN
+using DG.Tweening;
+#endif
 
 namespace Policy.UI
 {
     /// <summary>
     /// One swipe card on the Canvas. Handles drag, rotate, overlay reveal, and fly-out.
-    /// After the fly-out tween completes it calls OnResolved(direction).
+    /// Requires DOTween (install from Asset Store, then POLICY → Setup DOTween).
     /// </summary>
     public class SwipeCardView : MonoBehaviour,
         IPointerDownHandler, IDragHandler, IPointerUpHandler
     {
         [Header("References")]
-        [SerializeField] private CanvasGroup canvasGroup;
-        [SerializeField] private RectTransform rectTransform;
+        [SerializeField] private CanvasGroup     canvasGroup;
+        [SerializeField] private RectTransform   rectTransform;
 
         [Header("Labels")]
         [SerializeField] private TextMeshProUGUI typeLabel;
@@ -33,13 +35,23 @@ namespace Policy.UI
         [SerializeField] private CanvasGroup overlayDown;
 
         [Header("Swipe Config")]
-        [SerializeField] private float showOverlayThreshold  = 40f;
-        [SerializeField] private float resolveThreshold      = 80f;
-        [SerializeField] private float flyOutDistance        = 1200f;
-        [SerializeField] private float flyOutDuration        = 0.35f;
-        [SerializeField] private float snapBackDuration      = 0.25f;
+        [SerializeField] private float showOverlayThreshold = 40f;
+        [SerializeField] private float resolveThreshold     = 80f;
+        [SerializeField] private float flyOutDistance       = 1200f;
+        [SerializeField] private float flyOutDuration       = 0.35f;
+        [SerializeField] private float snapBackDuration     = 0.25f;
 
         public Action<SwipeDirection> OnResolved;
+
+        private static readonly System.Collections.Generic.Dictionary<CardType, string> TypeNames =
+            new()
+            {
+                { CardType.Decision,   "Decision"        },
+                { CardType.Investment, "Investment"       },
+                { CardType.Policy,     "Policy Proposal" },
+                { CardType.Event,      "Breaking Event"  },
+                { CardType.Prestige,   "Prestige Offer"  },
+            };
 
         private CardData _data;
         private Vector2  _pointerStart;
@@ -51,25 +63,13 @@ namespace Policy.UI
 
         public void Bind(CardData data)
         {
-            _data    = data;
+            _data     = data;
             _resolved = false;
 
-            var typeNames = new System.Collections.Generic.Dictionary<CardType, string>
-            {
-                { CardType.Decision,   "Decision"        },
-                { CardType.Investment, "Investment"       },
-                { CardType.Policy,     "Policy Proposal" },
-                { CardType.Event,      "Breaking Event"  },
-                { CardType.Prestige,   "Prestige Offer"  },
-            };
-
-            if (typeLabel   != null) typeLabel.text    = typeNames.GetValueOrDefault(data.type, "Card");
-            if (fromLabel   != null) fromLabel.text    = data.from;
-            if (titleLabel  != null) titleLabel.text   = data.title;
-            if (contextLabel != null) contextLabel.text = data.context;
-
-            // Accent color on type label
-            if (typeLabel != null) typeLabel.color = data.accentColor;
+            if (typeLabel    != null) { typeLabel.text    = TypeNames.GetValueOrDefault(data.type, "Card"); typeLabel.color = data.accentColor; }
+            if (fromLabel    != null) fromLabel.text      = data.from;
+            if (titleLabel   != null) titleLabel.text     = data.title;
+            if (contextLabel != null) contextLabel.text   = data.context;
         }
 
         public void SetDepth(int siblingIndex, Vector2 offset, Vector3 scale)
@@ -87,7 +87,9 @@ namespace Policy.UI
             _pointerStart = rectTransform.anchoredPosition;
             _dragDelta    = Vector2.zero;
             _dragging     = true;
+#if DOTWEEN
             DOTween.Kill(rectTransform);
+#endif
         }
 
         public void OnDrag(PointerEventData e)
@@ -107,11 +109,11 @@ namespace Policy.UI
             float absX = Mathf.Abs(_dragDelta.x);
             float absY = Mathf.Abs(_dragDelta.y);
 
-            if (_dragDelta.x > resolveThreshold)                          Resolve(SwipeDirection.Approve);
-            else if (_dragDelta.x < -resolveThreshold)                    Resolve(SwipeDirection.Decline);
-            else if (_dragDelta.y > resolveThreshold && absY > absX)      Resolve(SwipeDirection.Ignore);
-            else if (_dragDelta.y < -resolveThreshold && absY > absX)     Resolve(SwipeDirection.Escalate);
-            else                                                           SnapBack();
+            if      (_dragDelta.x  >  resolveThreshold)               Resolve(SwipeDirection.Approve);
+            else if (_dragDelta.x  < -resolveThreshold)               Resolve(SwipeDirection.Decline);
+            else if (_dragDelta.y  < -resolveThreshold && absY > absX) Resolve(SwipeDirection.Escalate);
+            else if (_dragDelta.y  >  resolveThreshold && absY > absX) Resolve(SwipeDirection.Ignore);
+            else                                                        SnapBack();
         }
 
         // ── Resolve ─────────────────────────────────────────────────
@@ -127,24 +129,68 @@ namespace Policy.UI
                 SwipeDirection.Decline  => Vector2.left  * flyOutDistance,
                 SwipeDirection.Escalate => Vector2.up    * flyOutDistance * 1.5f,
                 SwipeDirection.Ignore   => Vector2.down  * flyOutDistance,
-                _                       => Vector2.right * flyOutDistance
+                _                       => Vector2.right * flyOutDistance,
             };
 
-            float rotation = target.x * 0.05f;
-
+#if DOTWEEN
             var seq = DOTween.Sequence();
             seq.Append(rectTransform.DOAnchorPos(target, flyOutDuration).SetEase(Ease.InCubic));
-            seq.Join(rectTransform.DOLocalRotate(new Vector3(0, 0, rotation), flyOutDuration));
+            seq.Join(rectTransform.DOLocalRotate(new Vector3(0, 0, target.x * 0.05f), flyOutDuration));
             seq.Join(canvasGroup.DOFade(0f, flyOutDuration * 0.8f));
             seq.OnComplete(() => OnResolved?.Invoke(dir));
+#else
+            StartCoroutine(FlyOutCoroutine(target, dir));
+#endif
         }
 
         private void SnapBack()
         {
             HideAllOverlays();
-            var seq = DOTween.Sequence();
-            seq.Append(rectTransform.DOAnchorPos(Vector2.zero,   snapBackDuration).SetEase(Ease.OutBack));
-            seq.Join(rectTransform.DOLocalRotate(Vector3.zero,    snapBackDuration));
+#if DOTWEEN
+            DOTween.Sequence()
+                .Append(rectTransform.DOAnchorPos(Vector2.zero, snapBackDuration).SetEase(Ease.OutBack))
+                .Join(rectTransform.DOLocalRotate(Vector3.zero, snapBackDuration));
+#else
+            StartCoroutine(SnapBackCoroutine());
+#endif
+        }
+
+        // ── Fallback coroutines (no DOTween) ────────────────────────
+
+        private System.Collections.IEnumerator FlyOutCoroutine(Vector2 target, SwipeDirection dir)
+        {
+            float elapsed = 0f;
+            var   startPos = rectTransform.anchoredPosition;
+            var   startRot = rectTransform.localEulerAngles;
+            float startAlpha = canvasGroup != null ? canvasGroup.alpha : 1f;
+
+            while (elapsed < flyOutDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t  = Mathf.Clamp01(elapsed / flyOutDuration);
+                float et = t * t; // ease in
+                rectTransform.anchoredPosition = Vector2.Lerp(startPos, target, et);
+                rectTransform.localEulerAngles = Vector3.Lerp(startRot, new Vector3(0, 0, target.x * 0.05f), et);
+                if (canvasGroup != null) canvasGroup.alpha = Mathf.Lerp(startAlpha, 0f, et);
+                yield return null;
+            }
+            OnResolved?.Invoke(dir);
+        }
+
+        private System.Collections.IEnumerator SnapBackCoroutine()
+        {
+            float elapsed  = 0f;
+            var   startPos = rectTransform.anchoredPosition;
+            var   startRot = rectTransform.localEulerAngles;
+
+            while (elapsed < snapBackDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t  = Mathf.Clamp01(elapsed / snapBackDuration);
+                rectTransform.anchoredPosition = Vector2.Lerp(startPos, Vector2.zero, t);
+                rectTransform.localEulerAngles = Vector3.Lerp(startRot, Vector3.zero, t);
+                yield return null;
+            }
         }
 
         // ── Helpers ─────────────────────────────────────────────────
@@ -156,8 +202,8 @@ namespace Policy.UI
             float t    = showOverlayThreshold;
             float rng  = 60f;
 
-            SetOverlay(overlayRight, delta.x > t    ? Mathf.Clamp01((absX - t) / rng) : 0f);
-            SetOverlay(overlayLeft,  delta.x < -t   ? Mathf.Clamp01((absX - t) / rng) : 0f);
+            SetOverlay(overlayRight, delta.x > t            ? Mathf.Clamp01((absX - t) / rng) : 0f);
+            SetOverlay(overlayLeft,  delta.x < -t           ? Mathf.Clamp01((absX - t) / rng) : 0f);
             SetOverlay(overlayUp,    delta.y < -t && absY > absX ? Mathf.Clamp01((absY - t) / rng) : 0f);
             SetOverlay(overlayDown,  delta.y > t  && absY > absX ? Mathf.Clamp01((absY - t) / rng) : 0f);
         }
@@ -175,6 +221,11 @@ namespace Policy.UI
             SetOverlay(overlayDown,  0f);
         }
 
-        private void OnDestroy() => DOTween.Kill(rectTransform);
+        private void OnDestroy()
+        {
+#if DOTWEEN
+            DOTween.Kill(rectTransform);
+#endif
+        }
     }
 }
