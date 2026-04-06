@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -47,7 +48,7 @@ namespace Policy.Editor
             var gameStateAsset   = EnsureGameState();
 
             // Clean old scene objects
-            CleanOld("POLICY_GameManager", "POLICY_Systems", "POLICY_UIDocument", "POLICY_Canvas", "POLICY_EventSystem");
+            CleanOld("POLICY_GameManager", "POLICY_Systems", "POLICY_UIDocument", "POLICY_Canvas", "POLICY_EventSystem", "SwipeCard");
 
             // Build hierarchy
             var gmGO     = BuildGameManager(gameStateAsset);
@@ -532,24 +533,24 @@ namespace Policy.Editor
             return tmp;
         }
 
-        // Set serialized field by name
-        static void Wire(Object target, string field, Object value)
+        // Set serialized field via reflection — works on both in-memory and scene objects
+        static readonly BindingFlags BF =
+            BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
+
+        static void Wire(Object target, string fieldName, Object value)
         {
-            var so = new SerializedObject(target);
-            var p  = so.FindProperty(field);
-            if (p == null) { Debug.LogWarning($"[SceneBuilder] '{field}' not found on {target.GetType().Name}"); return; }
-            p.objectReferenceValue = value;
-            so.ApplyModifiedProperties();
+            var fi = target.GetType().GetField(fieldName, BF);
+            if (fi == null) { Debug.LogWarning($"[SceneBuilder] '{fieldName}' not found on {target.GetType().Name}"); return; }
+            fi.SetValue(target, value);
+            EditorUtility.SetDirty(target);
         }
 
-        static void SetArray<T>(Object target, string field, T[] items) where T : Object
+        static void SetArray<T>(Object target, string fieldName, T[] items) where T : Object
         {
-            var so = new SerializedObject(target);
-            var p  = so.FindProperty(field);
-            if (p == null) { Debug.LogWarning($"[SceneBuilder] array '{field}' not found on {target.GetType().Name}"); return; }
-            p.arraySize = items.Length;
-            for (int i = 0; i < items.Length; i++) p.GetArrayElementAtIndex(i).objectReferenceValue = items[i];
-            so.ApplyModifiedProperties();
+            var fi = target.GetType().GetField(fieldName, BF);
+            if (fi == null) { Debug.LogWarning($"[SceneBuilder] array '{fieldName}' not found on {target.GetType().Name}"); return; }
+            fi.SetValue(target, items);
+            EditorUtility.SetDirty(target);
         }
 
         static T[] LoadAll<T>(string folder) where T : Object =>
