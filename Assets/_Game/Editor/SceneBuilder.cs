@@ -511,6 +511,7 @@ namespace Policy.Editor
         static GameObject Child(GameObject parent, string name)
         {
             var go = new GameObject(name);
+            go.AddComponent<RectTransform>();           // must add RT before parenting
             go.transform.SetParent(parent.transform, false);
             return go;
         }
