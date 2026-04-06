@@ -60,7 +60,7 @@ namespace Policy.UI
             _data     = data;
             _resolved = false;
 
-            if (typeLabel    != null) { typeLabel.text  = TypeNames.GetValueOrDefault(data.type, "Card"); typeLabel.color = data.accentColor; }
+            if (typeLabel    != null) { typeLabel.text  = TypeNames.TryGetValue(data.type, out var tn) ? tn : "Card"; typeLabel.color = data.accentColor; }
             if (fromLabel    != null) fromLabel.text    = data.from;
             if (titleLabel   != null) titleLabel.text   = data.title;
             if (contextLabel != null) contextLabel.text = data.context;
