@@ -30,6 +30,16 @@ namespace Policy.Editor
         [MenuItem("POLICY/Build Scene")]
         public static void BuildScene()
         {
+            try { BuildSceneInternal(); }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"[POLICY] Build Scene failed: {e}");
+                EditorUtility.DisplayDialog("POLICY — Build Error", e.Message, "OK");
+            }
+        }
+
+        static void BuildSceneInternal()
+        {
             // Ensure data assets exist first
             if (LoadAll<CardData>("Assets/Data/Cards").Length == 0)
             {
@@ -66,7 +76,7 @@ namespace Policy.Editor
 
             Debug.Log("[POLICY] ✓ Scene built successfully. Press Ctrl+S to save.");
             EditorUtility.DisplayDialog("POLICY", "Scene built!\n\nCtrl+S to save the scene.", "OK");
-        }
+        } // BuildSceneInternal
 
         // ─────────────────────────────────────────────────────────
         // PREFAB: SwipeCard
@@ -333,7 +343,7 @@ namespace Policy.Editor
             go.transform.SetParent(parent, false);
             Stretch(RT(go));
             var view = go.AddComponent<CardDeckView>();
-            Wire(view, "cardPrefab", cardPrefab);
+            Wire(view, "cardPrefab", cardPrefab.GetComponent<SwipeCardView>());
             Wire(view, "deckSystem", deckSystem);
             Wire(view, "deckParent", go.GetComponent<RectTransform>());
             return go;
@@ -540,16 +550,16 @@ namespace Policy.Editor
         {
             var fi = target.GetType().GetField(fieldName, BF);
             if (fi == null) { Debug.LogWarning($"[SceneBuilder] '{fieldName}' not found on {target.GetType().Name}"); return; }
-            fi.SetValue(target, value);
-            EditorUtility.SetDirty(target);
+            try { fi.SetValue(target, value); EditorUtility.SetDirty(target); }
+            catch (System.Exception e) { Debug.LogError($"[SceneBuilder] Wire '{fieldName}' on {target.GetType().Name}: {e.Message}"); }
         }
 
         static void SetArray<T>(Object target, string fieldName, T[] items) where T : Object
         {
             var fi = target.GetType().GetField(fieldName, BF);
             if (fi == null) { Debug.LogWarning($"[SceneBuilder] array '{fieldName}' not found on {target.GetType().Name}"); return; }
-            fi.SetValue(target, items);
-            EditorUtility.SetDirty(target);
+            try { fi.SetValue(target, items); EditorUtility.SetDirty(target); }
+            catch (System.Exception e) { Debug.LogError($"[SceneBuilder] SetArray '{fieldName}' on {target.GetType().Name}: {e.Message}"); }
         }
 
         static T[] LoadAll<T>(string folder) where T : Object =>
