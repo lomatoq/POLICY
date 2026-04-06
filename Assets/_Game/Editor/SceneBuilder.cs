@@ -79,8 +79,8 @@ namespace Policy.Editor
                 AssetDatabase.DeleteAsset(path);
 
             // Root — card
-            var root = new GameObject("SwipeCard");
-            var rootRT = root.AddComponent<RectTransform>();
+            var root = new GameObject("SwipeCard", typeof(RectTransform));
+            var rootRT = root.GetComponent<RectTransform>();
             rootRT.sizeDelta = new Vector2(340, 320);
 
             var rootCG  = root.AddComponent<CanvasGroup>();
@@ -200,9 +200,9 @@ namespace Policy.Editor
         static GameObject BuildEffectRowPrefab()
         {
             const string path = PrefabsPath + "/EffectRow.prefab";
-            if (AssetDatabase.LoadAssetAtPath<GameObject>(path) != null) return AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            if (AssetDatabase.LoadAssetAtPath<GameObject>(path) != null) AssetDatabase.DeleteAsset(path);
 
-            var go  = new GameObject("EffectRow");
+            var go  = new GameObject("EffectRow", typeof(RectTransform));
             RT(go).sizeDelta = new Vector2(248, 28);
             var bg  = go.AddComponent<RoundedImage>();
             bg.color = new Color(0.07f, 0.07f, 0.07f); bg.cornerRadius = 6f;
@@ -222,10 +222,9 @@ namespace Policy.Editor
         static TextMeshProUGUI BuildCollateralRowPrefab()
         {
             const string path = PrefabsPath + "/CollateralRow.prefab";
-            var existing = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-            if (existing != null) return existing.GetComponent<TextMeshProUGUI>();
+            if (AssetDatabase.LoadAssetAtPath<GameObject>(path) != null) AssetDatabase.DeleteAsset(path);
 
-            var go  = new GameObject("CollateralRow");
+            var go  = new GameObject("CollateralRow", typeof(RectTransform));
             RT(go).sizeDelta = new Vector2(300, 22);
             var tmp = go.AddComponent<TextMeshProUGUI>();
             tmp.fontSize = 9f; tmp.color = new Color(0.27f, 0.27f, 0.27f);
@@ -330,9 +329,9 @@ namespace Policy.Editor
 
         static GameObject BuildCardDeckView(Transform parent, GameObject cardPrefab, CardDeckSystem deckSystem)
         {
-            var go  = new GameObject("CardDeck");
+            var go  = new GameObject("CardDeck", typeof(RectTransform));
             go.transform.SetParent(parent, false);
-            Stretch(go.AddComponent<RectTransform>());
+            Stretch(RT(go));
             var view = go.AddComponent<CardDeckView>();
             Wire(view, "cardPrefab", cardPrefab);
             Wire(view, "deckSystem", deckSystem);
@@ -342,9 +341,9 @@ namespace Policy.Editor
 
         static GameObject BuildOutcomeFlash(Transform parent, GameObject effectPrefab)
         {
-            var root = new GameObject("OutcomeFlash");
+            var root = new GameObject("OutcomeFlash", typeof(RectTransform));
             root.transform.SetParent(parent, false);
-            Stretch(root.AddComponent<RectTransform>());
+            Stretch(RT(root));
             var rootCG = root.AddComponent<CanvasGroup>();
 
             // Dark overlay
@@ -390,9 +389,9 @@ namespace Policy.Editor
 
         static GameObject BuildWeeklyReport(Transform parent, TextMeshProUGUI collRowPrefab)
         {
-            var root = new GameObject("WeeklyReport");
+            var root = new GameObject("WeeklyReport", typeof(RectTransform));
             root.transform.SetParent(parent, false);
-            Stretch(root.AddComponent<RectTransform>());
+            Stretch(RT(root));
             var rootCG = root.AddComponent<CanvasGroup>();
 
             // Dark overlay
@@ -457,9 +456,9 @@ namespace Policy.Editor
 
         static GameObject BuildToast(Transform parent)
         {
-            var go = new GameObject("Toast");
+            var go = new GameObject("Toast", typeof(RectTransform));
             go.transform.SetParent(parent, false);
-            var rt = go.AddComponent<RectTransform>();
+            var rt = RT(go);
             rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0f);
             rt.pivot     = new Vector2(0.5f, 0f);
             rt.sizeDelta = new Vector2(260, 36);
@@ -509,15 +508,15 @@ namespace Policy.Editor
             foreach (var n in names) { var go = GameObject.Find(n); if (go) Object.DestroyImmediate(go); }
         }
 
+        // Always create UI children with RectTransform via constructor (AddComponent can't replace Transform)
         static GameObject Child(GameObject parent, string name)
         {
-            var go = new GameObject(name);
-            go.AddComponent<RectTransform>();           // must add RT before parenting
+            var go = new GameObject(name, typeof(RectTransform));
             go.transform.SetParent(parent.transform, false);
             return go;
         }
 
-        static RectTransform RT(GameObject go) => go.GetComponent<RectTransform>() ?? go.AddComponent<RectTransform>();
+        static RectTransform RT(GameObject go) => go.GetComponent<RectTransform>();
 
         static RectTransform Stretch(RectTransform rt, float l = 0, float r = 0, float t = 0, float b = 0)
         {
