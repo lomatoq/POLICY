@@ -1,12 +1,9 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Policy.Core;
-using Policy.Systems;
-#if DOTWEEN
-using DG.Tweening;
-#endif
 
 namespace Policy.UI
 {
@@ -25,17 +22,8 @@ namespace Policy.UI
 
         private GameState State => GameManager.Instance.state;
 
-        private void OnEnable()
-        {
-            GameEvents.OnWeekEnded += Show;
-            closeButton?.onClick.AddListener(Close);
-        }
-
-        private void OnDisable()
-        {
-            GameEvents.OnWeekEnded -= Show;
-            closeButton?.onClick.RemoveListener(Close);
-        }
+        private void OnEnable()  { GameEvents.OnWeekEnded += Show; closeButton?.onClick.AddListener(Close); }
+        private void OnDisable() { GameEvents.OnWeekEnded -= Show; closeButton?.onClick.RemoveListener(Close); }
 
         private void Show()
         {
@@ -53,53 +41,23 @@ namespace Policy.UI
                 var log    = s.collateralLog;
                 var recent = log.Count > 3 ? log.GetRange(log.Count - 3, 3) : new List<string>(log);
                 if (recent.Count == 0 && collateralRowPrefab != null)
-                {
                     Instantiate(collateralRowPrefab, collateralContainer).text = "No collateral yet.";
-                }
                 else
-                {
                     for (int i = 0; i < recent.Count; i++)
                     {
                         if (collateralRowPrefab == null) break;
-                        var row = Instantiate(collateralRowPrefab, collateralContainer);
-                        row.text = $"{i + 1}. {(recent[i].Length > 90 ? recent[i][..90] : recent[i])}";
+                        Instantiate(collateralRowPrefab, collateralContainer).text =
+                            $"{i + 1}. {(recent[i].Length > 90 ? recent[i][..90] : recent[i])}";
                     }
-                }
             }
 
             s.weekEarned = 0f;
             gameObject.SetActive(true);
             canvasGroup.alpha = 0f;
-
-#if DOTWEEN
             canvasGroup.DOFade(1f, 0.2f);
-#else
-            StartCoroutine(FadeIn());
-#endif
         }
 
-        private void Close()
-        {
-#if DOTWEEN
+        private void Close() =>
             canvasGroup.DOFade(0f, 0.15f).OnComplete(() => gameObject.SetActive(false));
-#else
-            StartCoroutine(FadeOut());
-#endif
-        }
-
-#if !DOTWEEN
-        private System.Collections.IEnumerator FadeIn()
-        {
-            float t = 0f;
-            while (t < 0.2f) { t += Time.deltaTime; canvasGroup.alpha = t / 0.2f; yield return null; }
-            canvasGroup.alpha = 1f;
-        }
-        private System.Collections.IEnumerator FadeOut()
-        {
-            float t = 0f;
-            while (t < 0.15f) { t += Time.deltaTime; canvasGroup.alpha = 1f - t / 0.15f; yield return null; }
-            gameObject.SetActive(false);
-        }
-#endif
     }
 }

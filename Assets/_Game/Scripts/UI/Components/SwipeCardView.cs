@@ -1,19 +1,16 @@
 using System;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Policy.Core;
 using Policy.Data;
-#if DOTWEEN
-using DG.Tweening;
-#endif
 
 namespace Policy.UI
 {
     /// <summary>
-    /// One swipe card on the Canvas. Handles drag, rotate, overlay reveal, and fly-out.
-    /// Requires DOTween (install from Asset Store, then POLICY → Setup DOTween).
+    /// One swipe card on the Canvas. Handles drag, rotate, overlay reveal, and fly-out via DOTween.
     /// </summary>
     public class SwipeCardView : MonoBehaviour,
         IPointerDownHandler, IDragHandler, IPointerUpHandler
@@ -43,15 +40,14 @@ namespace Policy.UI
 
         public Action<SwipeDirection> OnResolved;
 
-        private static readonly System.Collections.Generic.Dictionary<CardType, string> TypeNames =
-            new()
-            {
-                { CardType.Decision,   "Decision"        },
-                { CardType.Investment, "Investment"       },
-                { CardType.Policy,     "Policy Proposal" },
-                { CardType.Event,      "Breaking Event"  },
-                { CardType.Prestige,   "Prestige Offer"  },
-            };
+        private static readonly System.Collections.Generic.Dictionary<CardType, string> TypeNames = new()
+        {
+            { CardType.Decision,   "Decision"        },
+            { CardType.Investment, "Investment"       },
+            { CardType.Policy,     "Policy Proposal" },
+            { CardType.Event,      "Breaking Event"  },
+            { CardType.Prestige,   "Prestige Offer"  },
+        };
 
         private CardData _data;
         private Vector2  _pointerStart;
@@ -59,17 +55,15 @@ namespace Policy.UI
         private bool     _dragging;
         private bool     _resolved;
 
-        // ── Public API ──────────────────────────────────────────────
-
         public void Bind(CardData data)
         {
             _data     = data;
             _resolved = false;
 
-            if (typeLabel    != null) { typeLabel.text    = TypeNames.GetValueOrDefault(data.type, "Card"); typeLabel.color = data.accentColor; }
-            if (fromLabel    != null) fromLabel.text      = data.from;
-            if (titleLabel   != null) titleLabel.text     = data.title;
-            if (contextLabel != null) contextLabel.text   = data.context;
+            if (typeLabel    != null) { typeLabel.text  = TypeNames.GetValueOrDefault(data.type, "Card"); typeLabel.color = data.accentColor; }
+            if (fromLabel    != null) fromLabel.text    = data.from;
+            if (titleLabel   != null) titleLabel.text   = data.title;
+            if (contextLabel != null) contextLabel.text = data.context;
         }
 
         public void SetDepth(int siblingIndex, Vector2 offset, Vector3 scale)
@@ -79,17 +73,13 @@ namespace Policy.UI
             rectTransform.localScale       = scale;
         }
 
-        // ── Drag ────────────────────────────────────────────────────
-
         public void OnPointerDown(PointerEventData e)
         {
             if (_resolved) return;
             _pointerStart = rectTransform.anchoredPosition;
             _dragDelta    = Vector2.zero;
             _dragging     = true;
-#if DOTWEEN
             DOTween.Kill(rectTransform);
-#endif
         }
 
         public void OnDrag(PointerEventData e)
@@ -109,14 +99,12 @@ namespace Policy.UI
             float absX = Mathf.Abs(_dragDelta.x);
             float absY = Mathf.Abs(_dragDelta.y);
 
-            if      (_dragDelta.x  >  resolveThreshold)               Resolve(SwipeDirection.Approve);
-            else if (_dragDelta.x  < -resolveThreshold)               Resolve(SwipeDirection.Decline);
+            if      (_dragDelta.x  >  resolveThreshold)                Resolve(SwipeDirection.Approve);
+            else if (_dragDelta.x  < -resolveThreshold)                Resolve(SwipeDirection.Decline);
             else if (_dragDelta.y  < -resolveThreshold && absY > absX) Resolve(SwipeDirection.Escalate);
             else if (_dragDelta.y  >  resolveThreshold && absY > absX) Resolve(SwipeDirection.Ignore);
             else                                                        SnapBack();
         }
-
-        // ── Resolve ─────────────────────────────────────────────────
 
         private void Resolve(SwipeDirection dir)
         {
@@ -132,100 +120,33 @@ namespace Policy.UI
                 _                       => Vector2.right * flyOutDistance,
             };
 
-#if DOTWEEN
-            var seq = DOTween.Sequence();
-            seq.Append(rectTransform.DOAnchorPos(target, flyOutDuration).SetEase(Ease.InCubic));
-            seq.Join(rectTransform.DOLocalRotate(new Vector3(0, 0, target.x * 0.05f), flyOutDuration));
-            seq.Join(canvasGroup.DOFade(0f, flyOutDuration * 0.8f));
-            seq.OnComplete(() => OnResolved?.Invoke(dir));
-#else
-            StartCoroutine(FlyOutCoroutine(target, dir));
-#endif
+            DOTween.Sequence()
+                .Append(rectTransform.DOAnchorPos(target, flyOutDuration).SetEase(Ease.InCubic))
+                .Join(rectTransform.DOLocalRotate(new Vector3(0, 0, target.x * 0.05f), flyOutDuration))
+                .Join(canvasGroup.DOFade(0f, flyOutDuration * 0.8f))
+                .OnComplete(() => OnResolved?.Invoke(dir));
         }
 
         private void SnapBack()
         {
             HideAllOverlays();
-#if DOTWEEN
             DOTween.Sequence()
                 .Append(rectTransform.DOAnchorPos(Vector2.zero, snapBackDuration).SetEase(Ease.OutBack))
                 .Join(rectTransform.DOLocalRotate(Vector3.zero, snapBackDuration));
-#else
-            StartCoroutine(SnapBackCoroutine());
-#endif
         }
-
-        // ── Fallback coroutines (no DOTween) ────────────────────────
-
-        private System.Collections.IEnumerator FlyOutCoroutine(Vector2 target, SwipeDirection dir)
-        {
-            float elapsed = 0f;
-            var   startPos = rectTransform.anchoredPosition;
-            var   startRot = rectTransform.localEulerAngles;
-            float startAlpha = canvasGroup != null ? canvasGroup.alpha : 1f;
-
-            while (elapsed < flyOutDuration)
-            {
-                elapsed += Time.deltaTime;
-                float t  = Mathf.Clamp01(elapsed / flyOutDuration);
-                float et = t * t; // ease in
-                rectTransform.anchoredPosition = Vector2.Lerp(startPos, target, et);
-                rectTransform.localEulerAngles = Vector3.Lerp(startRot, new Vector3(0, 0, target.x * 0.05f), et);
-                if (canvasGroup != null) canvasGroup.alpha = Mathf.Lerp(startAlpha, 0f, et);
-                yield return null;
-            }
-            OnResolved?.Invoke(dir);
-        }
-
-        private System.Collections.IEnumerator SnapBackCoroutine()
-        {
-            float elapsed  = 0f;
-            var   startPos = rectTransform.anchoredPosition;
-            var   startRot = rectTransform.localEulerAngles;
-
-            while (elapsed < snapBackDuration)
-            {
-                elapsed += Time.deltaTime;
-                float t  = Mathf.Clamp01(elapsed / snapBackDuration);
-                rectTransform.anchoredPosition = Vector2.Lerp(startPos, Vector2.zero, t);
-                rectTransform.localEulerAngles = Vector3.Lerp(startRot, Vector3.zero, t);
-                yield return null;
-            }
-        }
-
-        // ── Helpers ─────────────────────────────────────────────────
 
         private void UpdateOverlays(Vector2 delta)
         {
-            float absX = Mathf.Abs(delta.x);
-            float absY = Mathf.Abs(delta.y);
-            float t    = showOverlayThreshold;
-            float rng  = 60f;
-
+            float absX = Mathf.Abs(delta.x), absY = Mathf.Abs(delta.y);
+            float t = showOverlayThreshold, rng = 60f;
             SetOverlay(overlayRight, delta.x > t            ? Mathf.Clamp01((absX - t) / rng) : 0f);
             SetOverlay(overlayLeft,  delta.x < -t           ? Mathf.Clamp01((absX - t) / rng) : 0f);
             SetOverlay(overlayUp,    delta.y < -t && absY > absX ? Mathf.Clamp01((absY - t) / rng) : 0f);
             SetOverlay(overlayDown,  delta.y > t  && absY > absX ? Mathf.Clamp01((absY - t) / rng) : 0f);
         }
 
-        private static void SetOverlay(CanvasGroup cg, float alpha)
-        {
-            if (cg != null) cg.alpha = alpha;
-        }
-
-        private void HideAllOverlays()
-        {
-            SetOverlay(overlayLeft,  0f);
-            SetOverlay(overlayRight, 0f);
-            SetOverlay(overlayUp,    0f);
-            SetOverlay(overlayDown,  0f);
-        }
-
-        private void OnDestroy()
-        {
-#if DOTWEEN
-            DOTween.Kill(rectTransform);
-#endif
-        }
+        private static void SetOverlay(CanvasGroup cg, float alpha) { if (cg) cg.alpha = alpha; }
+        private void HideAllOverlays() { SetOverlay(overlayLeft, 0); SetOverlay(overlayRight, 0); SetOverlay(overlayUp, 0); SetOverlay(overlayDown, 0); }
+        private void OnDestroy() => DOTween.Kill(rectTransform);
     }
 }
