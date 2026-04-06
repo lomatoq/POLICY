@@ -228,7 +228,6 @@ namespace Policy.Editor
             RT(go).sizeDelta = new Vector2(300, 22);
             var tmp = go.AddComponent<TextMeshProUGUI>();
             tmp.fontSize = 9f; tmp.color = new Color(0.27f, 0.27f, 0.27f);
-            tmp.enableWordWrapping = true;
 
             var prefab = PrefabUtility.SaveAsPrefabAsset(go, path);
             Object.DestroyImmediate(go);
@@ -383,7 +382,6 @@ namespace Policy.Editor
             var fromTMP  = MakeTMP(fromGO,  "✓ Approved · Decision",  9f,  new Color(0.20f, 0.20f, 0.20f));
             var titleTMP = MakeTMP(titleGO, "Card title preview",     14f, Color.white);
             var collTMP  = MakeTMP(collGO,  "Collateral pending.",    10f, new Color(0.33f, 0.33f, 0.33f));
-            collTMP.enableWordWrapping = true;
 
             root.SetActive(false);
             var overlay = root.AddComponent<OutcomeFlashOverlay>();
@@ -442,7 +440,7 @@ namespace Policy.Editor
             var closeBg  = closeBtnGO.AddComponent<RoundedImage>();
             closeBg.color = Color.clear; closeBg.cornerRadius = 6f;
             closeBg.outline = true; closeBg.outlineColor = new Color(0.13f, 0.13f, 0.13f);
-            var closeBtn = closeBtnGO.AddComponent<Button>();
+            var closeBtn = closeBtnGO.AddComponent<UnityEngine.UI.Button>();
             var closeTxtGO = Child(closeBtnGO, "Text");
             Stretch(closeTxtGO.AddComponent<RectTransform>());
             var closeTMP = MakeTMP(closeTxtGO, "Close", 10f, new Color(0.2f, 0.2f, 0.2f));
@@ -537,7 +535,6 @@ namespace Policy.Editor
         {
             var tmp = go.AddComponent<TextMeshProUGUI>();
             tmp.text = text; tmp.fontSize = size; tmp.color = color;
-            tmp.enableWordWrapping = true;
             return tmp;
         }
 
