@@ -293,17 +293,10 @@ namespace Policy.Editor
             var go  = new GameObject("POLICY_UIDocument");
             var doc = go.AddComponent<UIDocument>();
 
-            var so   = new SerializedObject(doc);
-            var psProp   = so.FindProperty("m_PanelSettings");
-            var uxmlProp = so.FindProperty("m_SourceAsset");
-            var uxml     = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UI/UXML/Main.uxml");
-            if (psProp   != null) psProp.objectReferenceValue   = ps;
-            if (uxmlProp != null) uxmlProp.objectReferenceValue = uxml;
-            else { /* Unity 6 field name fallback */
-                var alt = so.FindProperty("sourceAsset");
-                if (alt != null) alt.objectReferenceValue = uxml;
-            }
-            so.ApplyModifiedProperties();
+            var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UI/UXML/Main.uxml");
+            doc.panelSettings    = ps;
+            doc.visualTreeAsset  = uxml;
+            EditorUtility.SetDirty(doc);
 
             if (uxml == null) Debug.LogWarning("[SceneBuilder] Main.uxml not found.");
 
