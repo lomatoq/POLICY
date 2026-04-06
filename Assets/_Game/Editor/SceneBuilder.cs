@@ -163,7 +163,7 @@ namespace Policy.Editor
             Color bgColor, Color borderColor, string arrow, string label)
         {
             var ov   = Child(parent, name);
-            var ovRT = ov.AddComponent<RectTransform>();
+            var ovRT = RT(ov);
             Stretch(ovRT);
             var le  = ov.AddComponent<LayoutElement>(); le.ignoreLayout = true;
             var img = ov.AddComponent<RoundedImage>();
@@ -172,7 +172,7 @@ namespace Policy.Editor
             var cg  = ov.AddComponent<CanvasGroup>(); cg.alpha = 0f;
 
             var inner = Child(ov, "Inner");
-            Stretch(inner.AddComponent<RectTransform>());
+            Stretch(RT(inner));
             var vg = inner.AddComponent<VerticalLayoutGroup>();
             vg.childAlignment = TextAnchor.MiddleCenter;
             vg.childControlWidth = vg.childControlHeight = false;
@@ -349,13 +349,13 @@ namespace Policy.Editor
 
             // Dark overlay
             var darkBg = Child(root, "DarkBg");
-            Stretch(darkBg.AddComponent<RectTransform>());
+            Stretch(RT(darkBg));
             var darkImg = darkBg.AddComponent<RoundedImage>();
             darkImg.color = new Color(0, 0, 0, 0.5f);
 
             // Card panel (340 wide, auto height)
             var card   = Child(root, "Card");
-            var cardRT = card.AddComponent<RectTransform>();
+            var cardRT = RT(card);
             cardRT.anchorMin = cardRT.anchorMax = new Vector2(0.5f, 0.5f);
             cardRT.sizeDelta = new Vector2(300, 280);
             var cardBg = card.AddComponent<RoundedImage>();
@@ -397,12 +397,12 @@ namespace Policy.Editor
 
             // Dark overlay
             var darkBg = Child(root, "DarkBg");
-            Stretch(darkBg.AddComponent<RectTransform>());
+            Stretch(RT(darkBg));
             darkBg.AddComponent<RoundedImage>().color = new Color(0, 0, 0, 0.8f);
 
             // Report card
             var card   = Child(root, "ReportCard");
-            var cardRT = card.AddComponent<RectTransform>();
+            var cardRT = RT(card);
             cardRT.anchorMin = cardRT.anchorMax = new Vector2(0.5f, 0.5f);
             cardRT.sizeDelta = new Vector2(340, 480);
             var cardBg = card.AddComponent<RoundedImage>();
@@ -436,7 +436,7 @@ namespace Policy.Editor
             closeBg.outline = true; closeBg.outlineColor = new Color(0.13f, 0.13f, 0.13f);
             var closeBtn = closeBtnGO.AddComponent<UnityEngine.UI.Button>();
             var closeTxtGO = Child(closeBtnGO, "Text");
-            Stretch(closeTxtGO.AddComponent<RectTransform>());
+            Stretch(RT(closeTxtGO));
             var closeTMP = MakeTMP(closeTxtGO, "Close", 10f, new Color(0.2f, 0.2f, 0.2f));
             closeTMP.alignment = TextAlignmentOptions.Center;
 
@@ -472,7 +472,7 @@ namespace Policy.Editor
             var cg = go.AddComponent<CanvasGroup>(); cg.alpha = 0f;
 
             var txtGO = Child(go, "Label");
-            Stretch(txtGO.AddComponent<RectTransform>(), 15, 15);
+            Stretch(RT(txtGO), 15, 15);
             var tmp = MakeTMP(txtGO, "Toast message", 11f, Color.white);
             tmp.alignment = TextAlignmentOptions.Center;
 
