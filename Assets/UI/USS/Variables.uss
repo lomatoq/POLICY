@@ -1,0 +1,25 @@
+/* ── POLICY · Design Tokens ───────────────────────────────────── */
+:root {
+    --bg:        rgb(244, 243, 239);
+    --fg:        rgb(17, 17, 17);
+    --mid:       rgb(136, 136, 136);
+    --border:    rgb(221, 217, 208);
+    --card:      rgb(255, 255, 255);
+    --dark:      rgb(10, 10, 10);
+
+    --green:     rgb(26, 127, 90);
+    --green-bg:  rgb(232, 245, 238);
+    --green-ui:  rgb(34, 197, 94);
+
+    --red:       rgb(192, 57, 43);
+    --red-bg:    rgb(253, 236, 234);
+
+    --amber:     rgb(183, 104, 10);
+    --amber-bg:  rgb(253, 243, 224);
+
+    --blue:      rgb(24, 95, 165);
+    --purple:    rgb(127, 119, 221);
+
+    --font-sans: "DM Sans";
+    --font-mono: "DM Mono";
+}

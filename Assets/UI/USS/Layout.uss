@@ -1,0 +1,76 @@
+/* ── POLICY · Layout ─────────────────────────────────────────── */
+
+.screen {
+    position: absolute;
+    left: 0; right: 0; top: 0; bottom: 0;
+    flex-direction: column;
+    background-color: var(--bg);
+}
+
+.screen--hidden  { display: none; }
+.screen--active  { display: flex; }
+
+/* ── SPLASH ── */
+.splash__inner {
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--dark);
+    padding: 40px 24px;
+}
+.splash__stats {
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 36px;
+}
+.splash__stat {
+    align-items: center;
+    margin: 0 14px;
+}
+
+/* ── GAME SCREEN ── */
+.tabs {
+    flex-direction: row;
+    background-color: var(--dark);
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(17, 17, 17);
+    padding: 0 16px;
+}
+.tab-content {
+    flex: 1;
+    padding: 14px;
+    display: none;
+}
+.tab-content--active  { display: flex; }
+.tab-content--hidden  { display: none; }
+
+/* ── SWIPE SCREEN ── */
+.swipe-hints {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    margin-bottom: 14px;
+}
+.meters {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 14px 20px 8px;
+}
+.meter {
+    width: 50%;
+    padding: 0 4px 8px;
+}
+.card-deck-anchor {
+    flex: 1;
+}
+.swipe-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--dark);
+    border-top-width: 1px;
+    border-top-color: rgb(17,17,17);
+    padding: 12px 20px;
+}

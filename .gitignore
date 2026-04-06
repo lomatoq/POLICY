@@ -1,0 +1,55 @@
+# Unity generated
+Library/
+Temp/
+Obj/
+Logs/
+MemoryCaptures/
+Recordings/
+
+# Asset meta data should only be ignored when the corresponding asset is also ignored
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Unity3D generated meta files
+*.pidb
+*.pdb
+*.mdb
+
+# Unity3D generated file on crash reports
+sysinfo.txt
+
+# Builds
+Builds/
+Build/
+build/
+
+# Crashlytics generated file
+crashlytics-build.properties
+
+# Rider / Visual Studio
+.idea/
+.vs/
+*.csproj
+*.sln
+*.userprefs
+*.suo
+*.user
+ExportedObj/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# TextMeshPro (auto-generated assets, will be imported fresh)
+# Assets/TextMesh Pro/  -- keep this, it contains font assets
+
+# User-specific Unity settings
+UserSettings/

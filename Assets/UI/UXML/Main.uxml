@@ -1,0 +1,181 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance"
+         noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+         editor-extension-mode="False">
+    <Style src="../USS/Variables.uss" />
+    <Style src="../USS/Layout.uss" />
+    <Style src="../USS/Components.uss" />
+    <Style src="../USS/Animations.uss" />
+
+    <!-- SPLASH SCREEN -->
+    <ui:VisualElement name="screen-splash" class="screen screen--active">
+        <ui:VisualElement class="splash__inner">
+            <ui:Label text="POLICY" class="splash__logo" />
+            <ui:Label text="A capitalism simulator · 17+" class="splash__sub" />
+            <ui:Label text="You never do anything wrong.&#10;You just write the rules." class="splash__hook" />
+            <ui:Button name="btn-start" text="Start your first day →" class="btn-primary" />
+            <ui:VisualElement class="splash__stats">
+                <ui:VisualElement class="splash__stat">
+                    <ui:Label text="$2.5B" class="stat__num" />
+                    <ui:Label text="idle market" class="stat__lbl" />
+                </ui:VisualElement>
+                <ui:VisualElement class="splash__stat">
+                    <ui:Label text="0" class="stat__num" />
+                    <ui:Label text="games like this" class="stat__lbl" />
+                </ui:VisualElement>
+                <ui:VisualElement class="splash__stat">
+                    <ui:Label text="∞" class="stat__num" />
+                    <ui:Label text="people affected" class="stat__lbl" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+
+    <!-- GAME SCREEN -->
+    <ui:VisualElement name="screen-game" class="screen screen--hidden">
+        <!-- Topbar -->
+        <ui:VisualElement class="topbar">
+            <ui:VisualElement class="topbar__brand-group">
+                <ui:Label text="POLICY" class="topbar__brand" />
+                <ui:Label name="tb-level" text="Team Lead · Week 9" class="topbar__level" />
+            </ui:VisualElement>
+            <ui:VisualElement class="topbar__balance-group">
+                <ui:Label name="tb-bal" text="$48,240" class="topbar__bal" />
+                <ui:Label name="tb-rate" text="+$68/hr" class="topbar__rate" />
+            </ui:VisualElement>
+            <ui:VisualElement class="topbar__legacy-group">
+                <ui:Label name="tb-leg" text="71" class="topbar__leg" />
+                <ui:Label text="legacy" class="topbar__leg-lbl" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Tabs -->
+        <ui:VisualElement class="tabs">
+            <ui:Button name="tab-portfolio"  text="Portfolio"  class="tab tab--active" />
+            <ui:Button name="tab-decisions"  text="Decisions"  class="tab" />
+            <ui:Button name="tab-market"     text="Market"     class="tab" />
+            <ui:Button name="tab-policy"     text="Policy"     class="tab" />
+        </ui:VisualElement>
+
+        <!-- Tab: Portfolio -->
+        <ui:ScrollView name="tab-content-portfolio" class="tab-content tab-content--active">
+            <ui:VisualElement class="bank-card">
+                <ui:VisualElement class="bank-card__top">
+                    <ui:VisualElement>
+                        <ui:Label text="NeuralFlow Inc." class="bank-card__brand" />
+                        <ui:Label text="CAREER STATEMENT" class="bank-card__period" />
+                    </ui:VisualElement>
+                    <ui:VisualElement>
+                        <ui:Label name="bc-val" text="$48,240" class="bank-card__val" />
+                        <ui:Label text="+$8,400 this week" class="bank-card__chg" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="bank-card__grid">
+                    <ui:VisualElement class="bank-cell">
+                        <ui:Label text="Income/hr" class="bank-cell__lbl" />
+                        <ui:Label name="bc-rate" text="$68" class="bank-cell__val bank-cell__val--green" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="bank-cell">
+                        <ui:Label text="Legacy" class="bank-cell__lbl" />
+                        <ui:Label name="bc-leg" text="71/100" class="bank-cell__val bank-cell__val--green" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="bank-cell">
+                        <ui:Label text="Reports" class="bank-cell__lbl" />
+                        <ui:Label name="bc-staff" text="4" class="bank-cell__val bank-cell__val--white" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="bank-cell">
+                        <ui:Label text="Affected" class="bank-cell__lbl" />
+                        <ui:Label name="bc-aff" text="4" class="bank-cell__val bank-cell__val--white" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Label text="Active assets" class="sec-lbl" />
+            <ui:VisualElement name="asset-list" class="asset-list" />
+        </ui:ScrollView>
+
+        <!-- Tab: Market -->
+        <ui:ScrollView name="tab-content-market" class="tab-content tab-content--hidden">
+            <ui:Label text="Available to acquire" class="sec-lbl" />
+            <ui:VisualElement name="market-list" />
+        </ui:ScrollView>
+
+        <!-- Tab: Policy -->
+        <ui:ScrollView name="tab-content-policy" class="tab-content tab-content--hidden">
+            <ui:Label text="Active policies · auto-applying" class="sec-lbl" />
+            <ui:VisualElement class="policy-doc">
+                <ui:VisualElement class="policy-doc__head">
+                    <ui:Label text="Employee Conduct Policy v2.3" class="policy-doc__title" />
+                    <ui:VisualElement class="policy-live">
+                        <ui:Label text="● LIVE · " class="policy-live__dot" />
+                        <ui:Label name="policy-count" text="0" class="policy-live__count" />
+                        <ui:Label text=" applications" class="policy-live__dot" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="policy-body" class="policy-body" />
+            </ui:VisualElement>
+        </ui:ScrollView>
+    </ui:VisualElement>
+
+    <!-- SWIPE SCREEN (meters + topbar — cards are on Canvas) -->
+    <ui:VisualElement name="screen-swipe" class="screen screen--hidden">
+        <ui:VisualElement class="swipe-topbar">
+            <ui:VisualElement>
+                <ui:Label text="Decisions" class="swipe-topbar__title" />
+                <ui:Label name="stb-sub" text="Week 9 · 3 pending" class="swipe-topbar__sub" />
+            </ui:VisualElement>
+            <ui:Label name="stb-bal" text="$68/hr" class="swipe-topbar__bal" />
+        </ui:VisualElement>
+
+        <!-- Meters -->
+        <ui:VisualElement class="meters">
+            <ui:VisualElement class="meter">
+                <ui:Label text="Income" class="meter__label" />
+                <ui:VisualElement class="meter__track">
+                    <ui:VisualElement name="m-income" class="meter__fill meter__fill--income" style="width: 52%;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="meter">
+                <ui:Label text="Legacy" class="meter__label" />
+                <ui:VisualElement class="meter__track">
+                    <ui:VisualElement name="m-legacy" class="meter__fill meter__fill--legacy" style="width: 71%;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="meter">
+                <ui:Label text="Risk" class="meter__label" />
+                <ui:VisualElement class="meter__track">
+                    <ui:VisualElement name="m-risk" class="meter__fill meter__fill--risk" style="width: 28%;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="meter">
+                <ui:Label text="Scope" class="meter__label" />
+                <ui:VisualElement class="meter__track">
+                    <ui:VisualElement name="m-scope" class="meter__fill meter__fill--scope" style="width: 8%;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Swipe hints -->
+        <ui:VisualElement class="swipe-hints">
+            <ui:VisualElement class="hint hint--left">
+                <ui:Label text="← DECLINE" class="hint__dir" />
+                <ui:Label text="reject / block" class="hint__sub" />
+            </ui:VisualElement>
+            <ui:VisualElement class="hint hint--mid">
+                <ui:Label text="↑" class="hint__dir" />
+                <ui:Label text="escalate" class="hint__sub" />
+            </ui:VisualElement>
+            <ui:VisualElement class="hint hint--right">
+                <ui:Label text="APPROVE →" class="hint__dir" />
+                <ui:Label text="sign / invest" class="hint__sub" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Card deck anchor: canvas cards are rendered here via RenderTexture or world space -->
+        <ui:VisualElement name="card-deck-anchor" class="card-deck-anchor" />
+
+        <ui:VisualElement class="swipe-footer">
+            <ui:Button name="btn-back" text="← back" class="btn-back" />
+            <ui:Label text="swipe or drag the card" class="swipe-footer__hint" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+
+</ui:UXML>

@@ -1,0 +1,46 @@
+/* ── POLICY · Transitions & Animated States ───────────────────── */
+
+/* Screen transitions */
+.screen--active {
+    opacity: 1;
+    transition-property: opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+}
+.screen--hidden {
+    opacity: 0;
+}
+
+/* Meter fill smoothing */
+.meter__fill {
+    transition-property: width;
+    transition-duration: 0.4s;
+    transition-timing-function: ease-in-out;
+}
+
+/* Tab active indicator */
+.tab {
+    transition-property: color, border-bottom-color;
+    transition-duration: 0.15s;
+}
+
+/* Asset card border pulse (pending decision) */
+.asset-card--has-decision {
+    border-color: var(--amber);
+    transition-property: border-color;
+    transition-duration: 1s;
+}
+
+/* Policy clause expand */
+.clause-item {
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
+}
+.clause-item:hover {
+    border-color: var(--mid);
+}
+
+/* Button hover */
+.btn-primary:hover { opacity: 0.9; }
+.mc-buy:hover      { opacity: 0.8; }
+.tab:hover         { color: rgb(255,255,255); }
