@@ -1,84 +1,93 @@
-/* ── POLICY · Layout ─────────────────────────────────────────── */
+/* ── POLICY · Layout (ported 1:1 from HTML prototype) ─────────── */
 
 .screen {
     position: absolute;
     left: 0; right: 0; top: 0; bottom: 0;
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     flex-direction: column;
-    background-color: var(--bg);
+    background-color: rgb(244,243,239);
 }
-.screen--hidden  { display: none; }
-.screen--active  { display: flex; }
+.screen--hidden { display: none; }
+.screen--active { display: flex; }
 
 /* ── SPLASH ── */
+/* HTML: #splash — background:dark; align-items:center; justify-content:center; padding:40px 24px */
 .splash__inner {
     flex-grow: 1;
-    flex-shrink: 0;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: var(--dark);
-    padding: 60px 28px 40px;
+    background-color: rgb(10,10,10);
+    padding: 40px 24px;
 }
+/* HTML: s-stats — display:flex; gap:28px; justify-content:center; margin-top:36px */
 .splash__stats {
     flex-direction: row;
-    justify-content: space-between;
-    align-self: stretch;           /* stretch to full width */
-    margin-top: 44px;
-    padding: 0 16px;
+    justify-content: center;
+    margin-top: 36px;
 }
+/* Each stat has margin 0 14px to simulate gap:28px */
 .splash__stat {
-    flex: 1;
     align-items: center;
+    margin-left: 14px;
+    margin-right: 14px;
 }
 
 /* ── GAME SCREEN ── */
-.tabs {
-    flex-direction: row;
-    background-color: var(--dark);
-    border-bottom-width: 1px;
-    border-bottom-color: rgb(26, 26, 26);
-    padding: 0 4px;
-    flex-shrink: 0;
-}
 .tab-content {
     flex: 1;
     padding: 14px;
     display: none;
 }
-.tab-content--active  { display: flex; flex-direction: column; }
-.tab-content--hidden  { display: none; }
+.tab-content--active { display: flex; flex-direction: column; }
+.tab-content--hidden { display: none; }
 
 /* ── SWIPE SCREEN ── */
-.swipe-hints {
-    flex-direction: row;
-    justify-content: space-between;
+/* HTML: swipe-arena — flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px */
+.swipe-arena {
+    flex: 1;
+    flex-direction: column;
     align-items: center;
-    padding: 0 20px;
-    margin-bottom: 14px;
-    flex-shrink: 0;
+    justify-content: center;
+    padding: 20px;
 }
+/* HTML: meters — width:100%; max-width:340px; display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:20px */
 .meters {
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 14px 20px 8px;
+    width: 100%;
+    max-width: 340px;
+    margin-bottom: 20px;
     flex-shrink: 0;
 }
 .meter {
     width: 50%;
     padding: 0 4px 8px;
 }
+/* HTML: swipe-hints — width:100%; max-width:340px; display:grid; grid-template-columns:1fr auto 1fr; gap:4px; margin-bottom:14px */
+.swipe-hints {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 340px;
+    margin-bottom: 14px;
+    flex-shrink: 0;
+}
 .card-deck-anchor {
     flex: 1;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
+/* HTML: swipe footer — padding:14px 20px; background:dark; border-top:1px solid #111 */
 .swipe-footer {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--dark);
+    background-color: rgb(10,10,10);
     border-top-width: 1px;
-    border-top-color: rgb(26,26,26);
-    padding: 12px 20px;
+    border-top-color: rgb(17,17,17);
+    padding: 14px 20px;
     flex-shrink: 0;
 }
