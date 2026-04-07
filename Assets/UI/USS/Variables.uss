@@ -1,27 +1,23 @@
 /* ── POLICY · Design Tokens ───────────────────────────────────── */
 :root {
-    --bg:        rgb(244, 243, 239);
-    --fg:        rgb(17, 17, 17);
-    --mid:       rgb(136, 136, 136);
-    --border:    rgb(221, 217, 208);
-    --card:      rgb(255, 255, 255);
-    --dark:      rgb(10, 10, 10);
+    --bg:    rgb(244, 243, 239);
+    --fg:    rgb(17, 17, 17);
+    --mid:   rgb(136, 136, 136);
+    --border:rgb(221, 217, 208);
+    --card:  rgb(255, 255, 255);
+    --dark:  rgb(10, 10, 10);
 
-    --green:     rgb(26, 127, 90);
-    --green-bg:  rgb(232, 245, 238);
-    --green-ui:  rgb(34, 197, 94);
+    --green:    rgb(26, 127, 90);
+    --green-ui: rgb(34, 197, 94);
+    --red:      rgb(192, 57, 43);
+    --amber:    rgb(183, 104, 10);
+    --blue:     rgb(24, 95, 165);
+    --purple:   rgb(127, 119, 221);
 
-    --red:       rgb(192, 57, 43);
-    --red-bg:    rgb(253, 236, 234);
-
-    --amber:     rgb(183, 104, 10);
-    --amber-bg:  rgb(253, 243, 224);
-
-    --blue:      rgb(24, 95, 165);
-    --purple:    rgb(127, 119, 221);
-
-    /* Fonts loaded from Assets/UI/Fonts/ — url() path relative to this USS file */
-    --font-sans: url("../Fonts/DMSans.ttf");
-    --font-mono: url("../Fonts/DMMono-Regular.ttf");
+    /* Static weight variants — UI Toolkit uses these directly */
+    --font-light:  url("../Fonts/DMSans-Light.ttf");
+    --font-sans:   url("../Fonts/DMSans-Regular.ttf");
+    --font-medium: url("../Fonts/DMSans-Medium.ttf");
+    --font-mono:   url("../Fonts/DMMono-Regular.ttf");
     --font-mono-med: url("../Fonts/DMMono-Medium.ttf");
 }

@@ -7,7 +7,7 @@
     color: rgb(255,255,255);
     -unity-text-align: upper-center;
     -unity-font-style: normal;
-    -unity-font: var(--font-sans);
+    -unity-font: var(--font-light);
     letter-spacing: -6px;
     margin-bottom: 20px;
 }
@@ -28,7 +28,7 @@
     white-space: normal;
     max-width: 300px;
     margin-bottom: 48px;
-    -unity-font: var(--font-sans);
+    -unity-font: var(--font-light);
 }
 /* HTML: ss-n — font-family:mono; font-size:18px; font-weight:500; color:#fff */
 .stat__num {
@@ -62,11 +62,11 @@
 .topbar__legacy-group  { flex-direction: column; align-items: flex-end; }
 
 /* HTML: tb-brand — font-size:14px; font-weight:300; letter-spacing:-.2px */
-.topbar__brand  { font-size: 14px; color: rgb(255,255,255); -unity-font: var(--font-sans); }
+.topbar__brand  { font-size: 14px; color: rgb(255,255,255); -unity-font: var(--font-light); }
 /* HTML: tb-level — font-size:9px; color:#444; font-family:mono */
 .topbar__level  { font-size: 9px;  color: rgb(68,68,68);   -unity-font: var(--font-mono); }
 /* HTML: tb-bal — font-size:18px; font-weight:300; letter-spacing:-.5px */
-.topbar__bal    { font-size: 18px; color: rgb(255,255,255); -unity-font: var(--font-sans); -unity-text-align: upper-center; }
+.topbar__bal    { font-size: 18px; color: rgb(255,255,255); -unity-font: var(--font-light); -unity-text-align: upper-center; }
 /* HTML: tb-rate — font-size:9px; color:#22c55e; font-family:mono */
 .topbar__rate   { font-size: 9px;  color: rgb(34,197,94);  -unity-font: var(--font-mono); -unity-text-align: upper-center; }
 /* HTML: tb-leg-val — font-size:16px; font-weight:500; font-family:mono */
@@ -100,11 +100,11 @@
 .bank-card { background-color: var(--dark); border-radius: 14px; padding: 18px 20px; margin-bottom: 12px; }
 .bank-card__top { flex-direction: row; justify-content: space-between; margin-bottom: 4px; }
 /* HTML: bc-brand — font-size:12px; font-weight:300; color:#fff */
-.bank-card__brand  { font-size: 12px; color: rgb(255,255,255); -unity-font: var(--font-sans); }
+.bank-card__brand  { font-size: 12px; color: rgb(255,255,255); -unity-font: var(--font-light); }
 /* HTML: bc-period — font-size:8px; color:#333; font-family:mono */
 .bank-card__period { font-size: 8px; color: rgb(51,51,51); -unity-font: var(--font-mono); margin-top: 2px; }
 /* HTML: bc-val — font-size:26px; font-weight:300; color:#fff; letter-spacing:-1.5px */
-.bank-card__val    { font-size: 26px; color: rgb(255,255,255); -unity-text-align: upper-right; -unity-font: var(--font-sans); letter-spacing: -1px; }
+.bank-card__val    { font-size: 26px; color: rgb(255,255,255); -unity-text-align: upper-right; -unity-font: var(--font-light); letter-spacing: -1px; }
 /* HTML: bc-chg — font-size:9px; color:#22c55e; font-family:mono */
 .bank-card__chg    { font-size: 9px; color: rgb(34,197,94); -unity-font: var(--font-mono); -unity-text-align: upper-right; margin-top: 1px; }
 .bank-card__grid   { flex-direction: row; padding-top: 12px; border-top-width: 1px; border-top-color: rgb(26,26,26); }
@@ -145,7 +145,7 @@
 .mc-desc     { font-size: 11px; color: rgb(136,136,136); margin-bottom: 8px; white-space: normal; }
 .mc-footer   { flex-direction: row; justify-content: space-between; align-items: center; }
 .mc-inc      { font-size: 10px; color: rgb(26,127,90); -unity-font: var(--font-mono); }
-.mc-buy      { padding: 6px 14px; background-color: rgb(17,17,17); color: rgb(255,255,255); border-width: 0; border-radius: 6px; font-size: 11px; -unity-font: var(--font-sans); -unity-font-style: bold; }
+.mc-buy      { padding: 6px 14px; background-color: rgb(17,17,17); color: rgb(255,255,255); border-width: 0; border-radius: 6px; font-size: 11px; -unity-font: var(--font-medium); -unity-font-style: bold; }
 .mc-buy--owned  { background-color: rgb(221,217,208); color: rgb(136,136,136); }
 .mc-buy--locked { background-color: rgb(221,217,208); color: rgb(136,136,136); opacity: 0.4; }
 
@@ -185,7 +185,7 @@
 /* ── SWIPE TOPBAR ── */
 .swipe-topbar { flex-direction: row; justify-content: space-between; align-items: center; background-color: var(--dark); padding: 12px 20px; border-bottom-width: 1px; border-bottom-color: rgb(17,17,17); flex-shrink: 0; }
 /* HTML: stb-title — font-size:14px; font-weight:300; color:#fff */
-.swipe-topbar__title { font-size: 14px; color: rgb(255,255,255); -unity-font: var(--font-sans); }
+.swipe-topbar__title { font-size: 14px; color: rgb(255,255,255); -unity-font: var(--font-light); }
 /* HTML: stb-sub — font-size:9px; color:#444; font-family:mono */
 .swipe-topbar__sub   { font-size: 9px; color: rgb(68,68,68); -unity-font: var(--font-mono); margin-top: 1px; }
 /* HTML: stb-bal — font-family:mono; font-size:14px; font-weight:500; color:#22c55e */
@@ -202,7 +202,7 @@
     font-size: 14px;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
-    -unity-font: var(--font-sans);
+    -unity-font: var(--font-medium);
     margin-bottom: 8px;
 }
 /* HTML: ← back btn */

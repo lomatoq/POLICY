@@ -4,47 +4,57 @@ using UnityEngine.EventSystems;
 
 namespace Policy.Editor
 {
-    /// <summary>
-    /// POLICY → Fix Input System
-    /// Replaces StandaloneInputModule with InputSystemUIInputModule if New Input System is active.
-    /// Run once — fixes the "You are trying to read Input using UnityEngine.Input" error.
-    /// </summary>
     public static class FixInputSystem
     {
         [MenuItem("POLICY/Fix Input System")]
         public static void Fix()
         {
+            // Fix EventSystem module
             var es = Object.FindFirstObjectByType<EventSystem>();
-            if (es == null)
+            if (es != null)
             {
-                Debug.LogWarning("[POLICY] No EventSystem found. Run POLICY → Build Scene first.");
-                return;
-            }
+                var old = es.GetComponent<StandaloneInputModule>();
+                if (old != null) Object.DestroyImmediate(old);
 
-            // Remove old module
-            var old = es.GetComponent<StandaloneInputModule>();
-            if (old != null) Object.DestroyImmediate(old);
-
-            // Try to add InputSystemUIInputModule
-            var t = System.Type.GetType(
-                "UnityEngine.InputSystem.UI.InputSystemUIInputModule, Unity.InputSystem");
-            if (t != null)
-            {
-                if (es.GetComponent(t) == null) es.gameObject.AddComponent(t);
-                Debug.Log("[POLICY] ✓ Replaced StandaloneInputModule with InputSystemUIInputModule.");
-            }
-            else
-            {
-                // Fallback: re-add StandaloneInputModule
-                if (es.GetComponent<StandaloneInputModule>() == null)
+                var t = System.Type.GetType(
+                    "UnityEngine.InputSystem.UI.InputSystemUIInputModule, Unity.InputSystem");
+                if (t != null && es.GetComponent(t) == null)
+                {
+                    es.gameObject.AddComponent(t);
+                    Debug.Log("[POLICY] ✓ Added InputSystemUIInputModule.");
+                }
+                else if (t == null && es.GetComponent<StandaloneInputModule>() == null)
+                {
                     es.gameObject.AddComponent<StandaloneInputModule>();
-                Debug.LogWarning("[POLICY] InputSystemUIInputModule not found — kept StandaloneInputModule. " +
-                                 "In Player Settings → Active Input Handling → set to 'Both' or 'Input Manager'.");
+                }
+                EditorUtility.SetDirty(es.gameObject);
             }
 
-            EditorUtility.SetDirty(es.gameObject);
+            // Force PlayerSettings to Both (activeInputHandler=2)
+            // This must be done via SerializedObject since there's no public API
+            var ps = Resources.FindObjectsOfTypeAll<UnityEngine.Object>();
+            var psPath = "ProjectSettings/ProjectSettings.asset";
+            var psObj = AssetDatabase.LoadAllAssetsAtPath(psPath);
+            if (psObj.Length > 0)
+            {
+                var so = new SerializedObject(psObj[0]);
+                var prop = so.FindProperty("activeInputHandler");
+                if (prop != null && prop.intValue != 2)
+                {
+                    prop.intValue = 2;
+                    so.ApplyModifiedProperties();
+                    Debug.Log("[POLICY] ✓ Set activeInputHandler to Both (2).");
+                }
+                else
+                {
+                    Debug.Log($"[POLICY] activeInputHandler already = {prop?.intValue}");
+                }
+            }
+
             UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(
                 UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
+            AssetDatabase.SaveAssets();
+            EditorUtility.DisplayDialog("POLICY", "Input System fixed!\nRestart Unity Editor to apply fully.", "OK");
         }
     }
 }
