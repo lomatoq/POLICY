@@ -71,6 +71,13 @@ namespace Policy.Editor
             var toastGO  = BuildToast(canvasGO.transform);
             BuildEventSystem();
 
+            // CardDeck hidden by default — SwipeScreen shows it when Decisions tab opens
+            deckGO.SetActive(false);
+
+            // Wire cardDeckGO into SwipeScreen
+            var swipeScreen = uiDocGO.GetComponent<SwipeScreen>();
+            Wire(swipeScreen, "cardDeckGO", deckGO);
+
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             AssetDatabase.SaveAssets();
 

@@ -5,13 +5,10 @@ using Policy.Systems;
 
 namespace Policy.UI
 {
-    /// <summary>
-    /// Swipe screen topbar + meters (UI Toolkit side).
-    /// The actual card deck lives on the Canvas layer (CardDeckView.cs).
-    /// </summary>
     public class SwipeScreen : MonoBehaviour
     {
         [SerializeField] private UIDocument uiDocument;
+        [SerializeField] private GameObject cardDeckGO; // assigned by SceneBuilder
 
         private Label         _stbSub, _stbBal;
         private VisualElement _mIncome, _mLegacy, _mRisk, _mScope;
@@ -29,15 +26,30 @@ namespace Policy.UI
             _mScope  = root.Q("m-scope");
 
             var backBtn = root.Q<Button>("btn-back");
-            if (backBtn != null) backBtn.clicked += () => ScreenManager.Instance.ShowGame();
+            if (backBtn != null) backBtn.clicked += HideSwipe;
 
-            GameEvents.OnStateChanged += Refresh;
-            Refresh();
+            GameEvents.OnStateChanged  += Refresh;
+            GameEvents.OnScreenSwipe   += ShowSwipe;
+            GameEvents.OnScreenGame    += HideSwipe;
         }
 
         private void OnDisable()
         {
             GameEvents.OnStateChanged -= Refresh;
+            GameEvents.OnScreenSwipe  -= ShowSwipe;
+            GameEvents.OnScreenGame   -= HideSwipe;
+        }
+
+        private void ShowSwipe()
+        {
+            if (cardDeckGO != null) cardDeckGO.SetActive(true);
+            Refresh();
+        }
+
+        private void HideSwipe()
+        {
+            if (cardDeckGO != null) cardDeckGO.SetActive(false);
+            ScreenManager.Instance.ShowGame();
         }
 
         private void Refresh()
@@ -61,7 +73,7 @@ namespace Policy.UI
         private int CardDeckSystem_Pending()
         {
             var sys = FindFirstObjectByType<CardDeckSystem>();
-            return sys != null ? Mathf.Min(3, sys.Count) : 0;
+            return sys != null ? sys.Count : 0;
         }
     }
 }

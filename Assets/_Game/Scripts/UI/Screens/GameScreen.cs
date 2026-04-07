@@ -61,7 +61,7 @@ namespace Policy.UI
             }
 
             var decBtn = _root.Q<Button>("tab-decisions");
-            if (decBtn != null) decBtn.clicked += () => ScreenManager.Instance.ShowSwipe();
+            if (decBtn != null) decBtn.clicked += () => { ScreenManager.Instance.ShowSwipe(); GameEvents.ScreenSwipe(); };
 
             GameEvents.OnStateChanged += Refresh;
             Refresh();

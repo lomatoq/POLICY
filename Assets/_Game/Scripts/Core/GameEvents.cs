@@ -13,6 +13,8 @@ namespace Policy.Core
         public static event Action OnWeekEnded;
         public static event Action<string> OnToast;
         public static event Action OnGameStarted;
+        public static event Action OnScreenSwipe;
+        public static event Action OnScreenGame;
 
         public static void StateChanged()                                          => OnStateChanged?.Invoke();
         public static void CardResolved(CardData card, CardChoice choice, SwipeDirection dir) => OnCardResolved?.Invoke(card, choice, dir);
@@ -20,5 +22,7 @@ namespace Policy.Core
         public static void WeekEnded()                                             => OnWeekEnded?.Invoke();
         public static void Toast(string msg)                                       => OnToast?.Invoke(msg);
         public static void GameStarted()                                           => OnGameStarted?.Invoke();
+        public static void ScreenSwipe()                                           => OnScreenSwipe?.Invoke();
+        public static void ScreenGame()                                            => OnScreenGame?.Invoke();
     }
 }

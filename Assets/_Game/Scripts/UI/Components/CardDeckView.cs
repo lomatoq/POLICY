@@ -72,8 +72,15 @@ namespace Policy.UI
                 rt.SetSiblingIndex(2);
                 rt.DOAnchorPos(Vector2.zero, PromoteDur).SetEase(Ease.OutCubic);
                 rt.DOScale(Vector3.one, PromoteDur);
-                var next = deckSystem.PeekTop(1);
-                if (next.Length > 0) _cards[0].OnResolved += d => OnCardResolved(_cards[0], next[0], d);
+
+                // Wire resolve callback for newly-promoted top card
+                var newTop = _cards[0]; // capture before lambda
+                var peek   = deckSystem.PeekTop(1);
+                if (peek.Length > 0)
+                {
+                    var newData = peek[0];
+                    newTop.OnResolved += d => OnCardResolved(newTop, newData, d);
+                }
             }
 
             if (_cards[1] != null)
@@ -84,9 +91,13 @@ namespace Policy.UI
                 rt.DOScale(BackScale1, PromoteDur);
             }
 
+            // Refill when deck runs dry
+            if (deckSystem.Count == 0) deckSystem.Refill();
+
+            // Spawn new back card if deck has enough
             var upcoming = deckSystem.PeekTop(3);
-            if (upcoming.Length >= 3) _cards[2] = SpawnCard(upcoming[2], 2);
-            if (deckSystem.Count == 0 && _cards[0] == null) deckSystem.Refill();
+            if (upcoming.Length >= 3 && _cards[2] == null)
+                _cards[2] = SpawnCard(upcoming[2], 2);
         }
     }
 }
