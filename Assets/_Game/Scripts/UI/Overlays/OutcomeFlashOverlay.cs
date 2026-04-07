@@ -59,7 +59,9 @@ namespace Policy.UI
         private void TryAddEffect(bool condition, string text, string colorClass)
         {
             if (!condition || effectRowPrefab == null) return;
-            var lbl = Instantiate(effectRowPrefab, effectsContainer).GetComponent<TextMeshProUGUI>();
+            var inst = Instantiate(effectRowPrefab, effectsContainer);
+            // TMP label is on child "Label" (root has RoundedImage — two Graphics on one GO crash TMP)
+            var lbl = inst.GetComponentInChildren<TextMeshProUGUI>(true);
             if (lbl == null) return;
             lbl.text  = text;
             lbl.color = colorClass switch

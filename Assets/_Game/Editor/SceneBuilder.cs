@@ -212,12 +212,19 @@ namespace Policy.Editor
             const string path = PrefabsPath + "/EffectRow.prefab";
             if (AssetDatabase.LoadAssetAtPath<GameObject>(path) != null) AssetDatabase.DeleteAsset(path);
 
+            // Root: RoundedImage background only (no TMP on same GO — two Graphics conflict)
             var go  = new GameObject("EffectRow", typeof(RectTransform));
             RT(go).sizeDelta = new Vector2(248, 28);
-            var bg  = go.AddComponent<RoundedImage>();
+            var bg = go.AddComponent<RoundedImage>();
             bg.color = new Color(0.07f, 0.07f, 0.07f); bg.cornerRadius = 6f;
-            var tmp = go.AddComponent<TextMeshProUGUI>();
-            tmp.fontSize = 11f; tmp.color = new Color(0.47f, 0.47f, 0.47f);
+
+            // Child "Label": TMP here (NOT on root) — two Graphic components on same GO crash TMP
+            var lblGO = new GameObject("Label", typeof(RectTransform));
+            lblGO.transform.SetParent(go.transform, false);
+            Stretch(RT(lblGO));
+            var tmp = lblGO.AddComponent<TextMeshProUGUI>();
+            tmp.fontSize = 11f;
+            tmp.color    = new Color(0.47f, 0.47f, 0.47f);
             tmp.margin   = new Vector4(8, 5, 8, 5);
 
             var prefab = PrefabUtility.SaveAsPrefabAsset(go, path);
