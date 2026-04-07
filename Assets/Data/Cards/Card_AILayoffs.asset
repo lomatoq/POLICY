@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84fb30bf303684f5191dcf9b48013195, type: 3}
+  m_Name: Card_AILayoffs
+  m_EditorClassIdentifier: Assembly-CSharp::Policy.Data.CardData
+  type: 3
+  from: "Breaking \xB7 Market Event"
+  title: AI replaced 12% of your department's workload overnight. Board wants you
+    to act.
+  context: Option to eliminate 3 roles. Save $180K/yr. Or retrain. Or ignore report.
+  accentColor: {r: 0.44, g: 0.17, b: 0.07, a: 1}
+  approve:
+    label: Eliminate the 3 roles.
+    incomeDelta: 180
+    legacyDelta: -20
+    riskDelta: 15
+    scopeDelta: 3
+    policy: AI efficiency gains to be passed to shareholders, not retained staff.
+    collateral: Maria, James, and Priya 2.0 received letters Friday. Effective 30
+      days.
+    returnNote: 
+    unlocksAssetId: 
+  decline:
+    label: Retrain the team.
+    incomeDelta: -20
+    legacyDelta: 10
+    riskDelta: -5
+    scopeDelta: 3
+    policy: AI displacement must include retraining programme.
+    collateral: 6-month program. 2 of 3 successfully upskilled. 1 left voluntarily.
+    returnNote: 
+    unlocksAssetId: 
+  escalate:
+    label: 'Propose hybrid: 1 role + retraining.'
+    incomeDelta: 60
+    legacyDelta: -4
+    riskDelta: 4
+    scopeDelta: 3
+    policy: AI transitions to follow 1/3 elimination, 2/3 retraining ratio.
+    collateral: Board satisfied. Team partially satisfied. Press calls it 'pragmatic.'
+    returnNote: 
+    unlocksAssetId: 
+  ignore:
+    label: Delay the decision.
+    incomeDelta: 0
+    legacyDelta: 0
+    riskDelta: 8
+    scopeDelta: 0
+    policy: 
+    collateral: 
+    returnNote: "Returns week 11 \u2014 board now demands full elimination."
+    unlocksAssetId: 

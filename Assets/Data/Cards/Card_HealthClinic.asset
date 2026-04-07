@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84fb30bf303684f5191dcf9b48013195, type: 3}
+  m_Name: Card_HealthClinic
+  m_EditorClassIdentifier: Assembly-CSharp::Policy.Data.CardData
+  type: 1
+  from: "Market Opportunity \xB7 Healthcare"
+  title: Acquire 40% stake in HealthFirst Private Clinic.
+  context: $8,000 upfront. +$142/hr passive. Decisions involve patient care vs margins.
+  accentColor: {r: 0.1, g: 0.43, b: 0.34, a: 1}
+  approve:
+    label: Acquire.
+    incomeDelta: 142
+    legacyDelta: 0
+    riskDelta: 8
+    scopeDelta: 50
+    policy: 
+    collateral: 340 patients under your policy framework. First decision arrives
+      in 3 days.
+    returnNote: 
+    unlocksAssetId: clinic
+  decline:
+    label: Pass.
+    incomeDelta: 0
+    legacyDelta: 0
+    riskDelta: 0
+    scopeDelta: 0
+    policy: 
+    collateral: Competitor acquired it instead. Now worth $14K.
+    returnNote: 
+    unlocksAssetId: 
+  escalate:
+    label: Request full audit first.
+    incomeDelta: 0
+    legacyDelta: 2
+    riskDelta: -3
+    scopeDelta: 0
+    policy: 
+    collateral: Audit reveals 12 malpractice claims. You decline. Wise.
+    returnNote: 
+    unlocksAssetId: 
+  ignore:
+    label: Maybe later.
+    incomeDelta: 0
+    legacyDelta: 0
+    riskDelta: 0
+    scopeDelta: 0
+    policy: 
+    collateral: 
+    returnNote: "Returns week 11 \u2014 price is now $11,000."
+    unlocksAssetId: 

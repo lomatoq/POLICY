@@ -500,10 +500,17 @@ namespace Policy.Editor
 
         static void BuildEventSystem()
         {
-            if (Object.FindFirstObjectByType<UnityEngine.EventSystems.EventSystem>() != null) return;
+            // Remove any old EventSystem (may have wrong input module)
+            var existing = Object.FindFirstObjectByType<UnityEngine.EventSystems.EventSystem>();
+            if (existing != null) Object.DestroyImmediate(existing.gameObject);
+
             var go = new GameObject("POLICY_EventSystem");
             go.AddComponent<UnityEngine.EventSystems.EventSystem>();
-            go.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
+
+            // Use InputSystemUIInputModule if New Input System is active, else StandaloneInputModule
+            var t = System.Type.GetType("UnityEngine.InputSystem.UI.InputSystemUIInputModule, Unity.InputSystem");
+            if (t != null) go.AddComponent(t);
+            else           go.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
         }
 
         // ─────────────────────────────────────────────────────────

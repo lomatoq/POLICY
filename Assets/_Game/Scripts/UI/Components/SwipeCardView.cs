@@ -84,7 +84,7 @@ namespace Policy.UI
 
         public void OnDrag(PointerEventData e)
         {
-            if (!_dragging || _resolved) return;
+            if (e == null || !_dragging || _resolved) return;
             _dragDelta += e.delta;
             rectTransform.anchoredPosition = _pointerStart + _dragDelta;
             rectTransform.localEulerAngles = new Vector3(0f, 0f, -_dragDelta.x * 0.08f);
@@ -93,7 +93,7 @@ namespace Policy.UI
 
         public void OnPointerUp(PointerEventData e)
         {
-            if (!_dragging || _resolved) return;
+            if (e == null || !_dragging || _resolved) return;
             _dragging = false;
 
             float absX = Mathf.Abs(_dragDelta.x);

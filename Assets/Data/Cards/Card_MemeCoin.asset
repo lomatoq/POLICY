@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84fb30bf303684f5191dcf9b48013195, type: 3}
+  m_Name: Card_MemeCoin
+  m_EditorClassIdentifier: Assembly-CSharp::Policy.Data.CardData
+  type: 1
+  from: "Market Alert \xB7 Crypto"
+  title: MEME token pump underway. 2,140 retail holders. Peak estimated in 4 hours.
+  context: "Dump now: +$28K. Hold: risk \u221260% if peak passes."
+  accentColor: {r: 0.39, g: 0.22, b: 0.02, a: 1}
+  approve:
+    label: Dump now. Take the $28K.
+    incomeDelta: 28000
+    legacyDelta: -22
+    riskDelta: 8
+    scopeDelta: 2140
+    policy: 
+    collateral: "2,140 holders averaged \u2212$847 loss. Your gain: $28,000."
+    returnNote: 
+    unlocksAssetId: 
+  decline:
+    label: Don't touch it. Integrity intact.
+    incomeDelta: 0
+    legacyDelta: 5
+    riskDelta: -3
+    scopeDelta: 0
+    policy: 
+    collateral: Token crashed anyway. You avoided both profit and blame.
+    returnNote: 
+    unlocksAssetId: 
+  escalate:
+    label: Sell 50%, hold 50%.
+    incomeDelta: 14000
+    legacyDelta: -10
+    riskDelta: 4
+    scopeDelta: 1070
+    policy: 
+    collateral: "Net: +$14K. 1,070 holders affected at \u2212$423 average."
+    returnNote: 
+    unlocksAssetId: 
+  ignore:
+    label: Watch and wait.
+    incomeDelta: 0
+    legacyDelta: 0
+    riskDelta: 10
+    scopeDelta: 0
+    policy: 
+    collateral: 
+    returnNote: Returns at peak. Same choice. Less time.
+    unlocksAssetId: 

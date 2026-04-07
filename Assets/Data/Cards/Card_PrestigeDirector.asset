@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84fb30bf303684f5191dcf9b48013195, type: 3}
+  m_Name: Card_PrestigeDirector
+  m_EditorClassIdentifier: Assembly-CSharp::Policy.Data.CardData
+  type: 4
+  from: "Board of Directors \xB7 Confidential"
+  title: "Director role offered. Resign your current position. Scope: 200 people.
+    Income \xD72.4."
+  context: Your policies travel with you. Your legacy score does too.
+  accentColor: {r: 0.96, g: 0.62, b: 0.07, a: 1}
+  approve:
+    label: Accept. Go bigger.
+    incomeDelta: 0
+    legacyDelta: 0
+    riskDelta: 0
+    scopeDelta: 200
+    policy: 
+    collateral: "PRESTIGE \u2014 income \xD72.4. New decisions arrive at scale."
+    returnNote: 
+    unlocksAssetId: 
+  decline:
+    label: Stay. Consolidate.
+    incomeDelta: 20
+    legacyDelta: 4
+    riskDelta: -5
+    scopeDelta: 0
+    policy: 
+    collateral: You optimised your current role. Stable growth.
+    returnNote: 
+    unlocksAssetId: 
+  escalate:
+    label: 'Negotiate: keep current team.'
+    incomeDelta: 0
+    legacyDelta: 2
+    riskDelta: 0
+    scopeDelta: 100
+    policy: 
+    collateral: Board agrees. Half the scope. 60% of the multiplier.
+    returnNote: 
+    unlocksAssetId: 
+  ignore:
+    label: Think about it.
+    incomeDelta: 0
+    legacyDelta: 0
+    riskDelta: 0
+    scopeDelta: 0
+    policy: 
+    collateral: 
+    returnNote: Offer expires week 13. Someone else accepts it.
+    unlocksAssetId: 

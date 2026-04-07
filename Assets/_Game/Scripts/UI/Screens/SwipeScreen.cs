@@ -16,7 +16,7 @@ namespace Policy.UI
         private Label         _stbSub, _stbBal;
         private VisualElement _mIncome, _mLegacy, _mRisk, _mScope;
 
-        private GameState State => GameManager.Instance.state;
+        private GameState State => GameManager.Instance != null ? GameManager.Instance.state : null;
 
         private void OnEnable()
         {
@@ -43,6 +43,7 @@ namespace Policy.UI
         private void Refresh()
         {
             var s = State;
+            if (s == null) return;
             if (_stbSub != null) _stbSub.text = $"Week {s.week} · {CardDeckSystem_Pending()} pending";
             if (_stbBal != null) _stbBal.text = $"${Mathf.RoundToInt(s.incomePerHour)}/hr";
 

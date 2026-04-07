@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84fb30bf303684f5191dcf9b48013195, type: 3}
+  m_Name: Card_AvailabilityTracking
+  m_EditorClassIdentifier: Assembly-CSharp::Policy.Data.CardData
+  type: 2
+  from: HR Team Proposal
+  title: "Implement mandatory 6am\u201310pm availability tracking for all staff."
+  context: Estimated +$24/hr efficiency gain. 47 employees affected.
+  accentColor: {r: 0.47, g: 0.47, b: 0.87, a: 1}
+  approve:
+    label: Implement.
+    incomeDelta: 24
+    legacyDelta: -14
+    riskDelta: 12
+    scopeDelta: 47
+    policy: "All staff must maintain active status 6am\u201310pm weekdays."
+    collateral: 14 employees began job searching week 1. 3 resigned by month end.
+    returnNote: 
+    unlocksAssetId: 
+  decline:
+    label: Reject.
+    incomeDelta: 0
+    legacyDelta: 4
+    riskDelta: -2
+    scopeDelta: 0
+    policy: 'Extended availability tracking: rejected.'
+    collateral: Team morale +8 in next survey. HR notes 'unusual positive trend.'
+    returnNote: 
+    unlocksAssetId: 
+  escalate:
+    label: Trial with volunteers only.
+    incomeDelta: 8
+    legacyDelta: 1
+    riskDelta: 2
+    scopeDelta: 6
+    policy: "Voluntary availability tracking pilot \u2014 6 participants."
+    collateral: Results inconclusive. Pilot becomes permanent for volunteers.
+    returnNote: 
+    unlocksAssetId: 
+  ignore:
+    label: Table it.
+    incomeDelta: 0
+    legacyDelta: 0
+    riskDelta: 2
+    scopeDelta: 0
+    policy: 
+    collateral: 
+    returnNote: "Returns week 10 \u2014 now mandatory per new company directive."
+    unlocksAssetId: 
