@@ -20,6 +20,8 @@
     --blue:      rgb(24, 95, 165);
     --purple:    rgb(127, 119, 221);
 
-    --font-sans: "DM Sans";
-    --font-mono: "DM Mono";
+    /* Fonts loaded from Assets/UI/Fonts/ — url() path relative to this USS file */
+    --font-sans: url("../Fonts/DMSans.ttf");
+    --font-mono: url("../Fonts/DMMono-Regular.ttf");
+    --font-mono-med: url("../Fonts/DMMono-Medium.ttf");
 }
