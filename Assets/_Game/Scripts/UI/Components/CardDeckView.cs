@@ -20,7 +20,7 @@ namespace Policy.UI
 
         private SwipeCardView[] _cards = new SwipeCardView[3];
 
-        private void Start()        { BuildDeck(); GameEvents.OnGameStarted += BuildDeck; }
+        private void Start()        { GameEvents.OnGameStarted += BuildDeck; }
         private void OnDestroy()    { GameEvents.OnGameStarted -= BuildDeck; }
 
         private void BuildDeck()
