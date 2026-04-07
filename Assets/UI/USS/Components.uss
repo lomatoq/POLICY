@@ -186,24 +186,25 @@ Label, Button {
 
 /* SPLASH */
 .splash__logo {
-    font-size: 72px;
+    font-size: 80px;
     color: rgb(255,255,255);
     -unity-text-align: upper-center;
     -unity-font-style: bold;
     -unity-font: var(--font-sans);
-    margin-bottom: 16px;
+    letter-spacing: -4px;
+    margin-bottom: 12px;
 }
 .splash__sub  {
     font-size: 10px;
-    color: rgb(68,68,68);
+    color: rgb(51,51,51);
     -unity-font: var(--font-mono);
-    text-transform: uppercase;
     -unity-text-align: upper-center;
+    letter-spacing: 2px;
     margin-bottom: 40px;
 }
 .splash__hook {
     font-size: 17px;
-    color: rgb(102,102,102);
+    color: rgb(100,100,100);
     -unity-text-align: upper-center;
     white-space: normal;
     max-width: 300px;

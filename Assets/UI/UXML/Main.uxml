@@ -10,7 +10,7 @@
     <ui:VisualElement name="screen-splash" class="screen screen--active">
         <ui:VisualElement class="splash__inner">
             <ui:Label text="POLICY" class="splash__logo" />
-            <ui:Label text="A capitalism simulator · 17+" class="splash__sub" />
+            <ui:Label text="A CAPITALISM SIMULATOR · 17+" class="splash__sub" />
             <ui:Label text="You never do anything wrong.&#10;You just write the rules." class="splash__hook" />
             <ui:Button name="btn-start" text="Start your first day →" class="btn-primary" />
             <ui:VisualElement class="splash__stats">

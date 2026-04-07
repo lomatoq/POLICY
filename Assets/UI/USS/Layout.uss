@@ -3,30 +3,34 @@
 .screen {
     position: absolute;
     left: 0; right: 0; top: 0; bottom: 0;
+    width: 100%;
+    height: 100%;
     flex-direction: column;
     background-color: var(--bg);
 }
-
 .screen--hidden  { display: none; }
 .screen--active  { display: flex; }
 
 /* ── SPLASH ── */
 .splash__inner {
-    flex: 1;
+    flex-grow: 1;
+    flex-shrink: 0;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: var(--dark);
-    padding: 40px 24px;
+    padding: 60px 28px 40px;
 }
 .splash__stats {
     flex-direction: row;
-    justify-content: center;
-    margin-top: 36px;
+    justify-content: space-between;
+    align-self: stretch;           /* stretch to full width */
+    margin-top: 44px;
+    padding: 0 16px;
 }
 .splash__stat {
+    flex: 1;
     align-items: center;
-    margin: 0 14px;
 }
 
 /* ── GAME SCREEN ── */
@@ -34,15 +38,16 @@
     flex-direction: row;
     background-color: var(--dark);
     border-bottom-width: 1px;
-    border-bottom-color: rgb(17, 17, 17);
-    padding: 0 16px;
+    border-bottom-color: rgb(26, 26, 26);
+    padding: 0 4px;
+    flex-shrink: 0;
 }
 .tab-content {
     flex: 1;
     padding: 14px;
     display: none;
 }
-.tab-content--active  { display: flex; }
+.tab-content--active  { display: flex; flex-direction: column; }
 .tab-content--hidden  { display: none; }
 
 /* ── SWIPE SCREEN ── */
@@ -52,11 +57,13 @@
     align-items: center;
     padding: 0 20px;
     margin-bottom: 14px;
+    flex-shrink: 0;
 }
 .meters {
     flex-direction: row;
     flex-wrap: wrap;
     padding: 14px 20px 8px;
+    flex-shrink: 0;
 }
 .meter {
     width: 50%;
@@ -71,6 +78,7 @@
     align-items: center;
     background-color: var(--dark);
     border-top-width: 1px;
-    border-top-color: rgb(17,17,17);
+    border-top-color: rgb(26,26,26);
     padding: 12px 20px;
+    flex-shrink: 0;
 }
